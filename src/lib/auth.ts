@@ -47,6 +47,30 @@ export async function validateSessionToken(token: string): Promise<SessionValida
   return { session, user };
 }
 
+export async function invalidateSession(sessionId: string): Promise<void> {
+  await prisma.session.delete({ where: { id: sessionId } });
+}
 
+export async function invalidateAllSessions(userId: string): Promise<void> {
+  await prisma.session.deleteMany({ where: { userId } });
+}
+
+export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
+  event.cookies.set('session', token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    expires: expiresAt,
+    path: '/'
+  });
+}
+
+export function deleteSessionTokenCookie(event: RequestEvent): void {
+  event.cookies.set('session', '', {
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 0,
+    path: '/'
+  });
+}
 
 export type SessionValidationResult = | { session: Session; user: User } | { session: null; user: null;}
