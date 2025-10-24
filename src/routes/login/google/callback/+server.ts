@@ -11,10 +11,50 @@ import type { OAuth2Tokens } from "arctic";
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get('code');
   const state = event.url.searchParams.get('state');
-  const storedState = event.cookies.get('google_oauth_state');
-  const codeVerifier = event.cookies.get("google_code_verifier");
+  const storedState = event.cookies.get('google_oauth_state') ?? null;
+  const codeVerifier = event.cookies.get("google_code_verifier") ?? null;
   if (code === null || state === null || storedState === null || codeVerifier === null) { return new Response(null, { status: 400 }); }
   if (state !== storedState) {
     return new Response(null, { status: 400 });
   }
+  let tokens: OAuth2Tokens;
+  try {
+    tokens = await google.validateAuthorizationCode(code, codeVerifier);
+  } catch {
+    return new Response(null, { status: 400 });
+  }
+
+  const claims = decodeIdToken(tokens.idToken());
+  const claimsParser = new ObjectParser(claims);
+
+  const googleUserId = claimsParser.getString("sub");
+  const username = claimsParser.getString("name");
+  const email = claimsParser.getString("email");
+
+  await prisma.user.upsert({
+    where: {
+      id: googleUserId
+    },
+    update: {
+      id: googleUserId,
+      name: username,
+      email: email
+    },
+    create: {
+      id: googleUserId,
+      name: username,
+      email: email,
+      role: 0 //Default everyone to sales user
+    }
+  })
+  const sessionToken = generateSessionToken();
+  const session = await createSession(sessionToken, googleUserId);
+  console.log(session);
+  setSessionTokenCookie(event, sessionToken, session.expiresAt);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: '/'
+    }
+  })
 }
