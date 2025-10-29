@@ -41,4 +41,19 @@ model Session {
 
 model Customer { 
   id String @id 
+  name String
+  email String
+  phone String
+  address String
+  notes CustomerNote[]
+}
+
+model CustomerNote {
+  id String @id @default(cuid())
+  customerId String 
+  note String
+  postedBy String //So we can store names if we delete users
+  createdAt DateTime @default(now())
+
+  Customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)  
 }
