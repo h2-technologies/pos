@@ -1,0 +1,28 @@
+import { prisma } from '$lib/db';
+
+export async function POST({ locals, request }) {
+  if (!locals.session) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
+  const { name, phone, email, address } = await request.json();
+
+  if (!name || !phone || !email || !address) { return new Response(JSON.stringify({ success: false, message: "Invalid inputs" }), { status: 400 }); }
+
+  const id = () => {
+    const randomNum = Math.floor(Math.random() * (999999 + 1));
+
+    const paddedId = String(randomNum).padStart(6, '0');
+
+    return paddedId;
+  }
+  const customer = await prisma.customer.create({
+    data: {
+      id: id(),
+      name,
+      phone,
+      email,
+      address
+    }
+  })
+
+  if (!customer) { return new Response(JSON.stringify({ success: false, message: "Failed to create customer" }), { status: 500 }); }
+  return new Response(JSON.stringify({ success: true, message: "Customer created successfully", id: customer.id }), { status: 201 });
+}

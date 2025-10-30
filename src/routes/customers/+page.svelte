@@ -2,6 +2,7 @@
   import { page } from "$app/state";
   import type { Customer } from "@prisma/client";
   import { Modal, Toast } from "flowbite-svelte";
+	import { BanOutline, CheckCircleSolid } from "flowbite-svelte-icons";
 
   let customers: Customer[] = $state(page.data.customers);
 
@@ -10,6 +11,49 @@
 
   let targetCustomer: Customer | undefined = $state(undefined);
 
+	async function handleCustomerCreate() {
+		if (targetCustomer == undefined) {
+			//Problem
+			return;
+		}
+
+		const req = await fetch('/customers', {
+			method: 'POST',
+			body: JSON.stringify(targetCustomer)
+		})
+
+		const res = await req.json();
+
+		if (res.success) {
+			triggerSuccess();
+			targetCustomer.id = res.id;
+			customers.push({ ...targetCustomer });
+		} else {
+			triggerError();
+		}
+	}
+
+	let successToastStatus = $state(false);
+	let errorToastStatus = $state(false);
+	let counter = $state(5);
+
+	function triggerSuccess() {
+		successToastStatus = true;
+		counter = 5;
+		timeout();
+	}
+
+	function triggerError() {
+		errorToastStatus = true;
+		counter = 5;
+		timeout();
+	}
+
+	function timeout() {
+		if (--counter > 0) return setTimeout(timeout, 1000);
+		successToastStatus = false;
+		errorToastStatus = false;
+	}
 
 </script>
 
@@ -43,7 +87,7 @@
 			<input
 				type="email"
 				id="contactEmail"
-				bind:value={targetSupplier!.contactEmail}
+				bind:value={targetCustomer!.email}
 				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 			/>
 		</div>
@@ -52,20 +96,31 @@
 			<input
 				type="text"
 				id="address"
-				bind:value={targetSupplier!.billingAddress}
+				bind:value={targetCustomer!.address}
 				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 			/>
 		</div>
 		
-
 		<button
-			onclick={handleSupplierAdd}
+			onclick={handleCustomerCreate}
 			class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
 		>
 			Add Supplier
 		</button>
 	</div>
 </Modal>
+
+<Toast
+ dismissable={false}
+ position="top-right"
+ bind:toastStatus={successToastStatus}
+ class="bg-green-500 text-white"
+>
+	<div class="flex items-center">
+		<CheckCircleSolid class="mr-1.5 h-5 w-5" />
+		<span>Changes saved successfully!</span>
+	</div>
+</Toast>
 
 <table class="min-w-full divide-y divide-gray-200">
   <thead class="bg-gray-50">
