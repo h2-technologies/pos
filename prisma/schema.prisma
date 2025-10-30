@@ -45,6 +45,7 @@ model Customer {
   email String
   phone String
   address String
+  active Boolean @default(true)
   notes CustomerNote[]
 }
 

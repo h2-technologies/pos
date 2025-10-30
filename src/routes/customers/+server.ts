@@ -26,3 +26,24 @@ export async function POST({ locals, request }) {
   if (!customer) { return new Response(JSON.stringify({ success: false, message: "Failed to create customer" }), { status: 500 }); }
   return new Response(JSON.stringify({ success: true, message: "Customer created successfully", id: customer.id }), { status: 201 });
 }
+
+export async function PUT({ locals, request }) {
+  if (!locals.session) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
+
+  const { id, name, phone, email, address } = await request.json();
+
+  const customer = await prisma.customer.update({ 
+    where: {
+      id: id
+    },
+    data: {
+      name, 
+      phone,
+      email,
+      address
+    }
+  })
+
+  if (!customer) { return new Response(JSON.stringify({ success: false, message: "Failed to update customer" }), { status: 500 })}
+  return new Response(JSON.stringify({ success: true }))
+}

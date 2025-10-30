@@ -33,6 +33,28 @@
 		}
 	}
 
+	async function handleCustomerEdit() {
+		if (targetCustomer == undefined) {
+			//problem
+			return;
+		}
+
+		const req = await fetch('/customers', {
+			method: "PUT",
+			body: JSON.stringify(targetCustomer)
+		})
+
+		const res = await req.json();
+
+		if (res.success) {
+			triggerSuccess();
+			let idx = customers.findIndex(customer => customer.id == targetCustomer!.id);
+			customers[idx] = { ...targetCustomer };
+		} else {
+			triggerError();
+		}
+	}
+
 	let successToastStatus = $state(false);
 	let errorToastStatus = $state(false);
 	let counter = $state(5);
@@ -56,6 +78,10 @@
 	}
 
 </script>
+
+<svelte:head>
+	<title>Customers - H2 POS</title>
+</svelte:head>
 
 <!-- Create Customer Modal -->
 <Modal bind:open={addModal} class="overflow-hidden bg-white" autoclose>
@@ -105,7 +131,60 @@
 			onclick={handleCustomerCreate}
 			class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
 		>
-			Add Supplier
+			Add Customer
+		</button>
+	</div>
+</Modal>
+
+<!-- Edit Customer Modal -->
+<Modal bind:open={editModal} class="overflow-hidden bg-white" autoclose>
+  <div>
+		<p class="mb-4 text-lg font-semibold">Edit Customer</p>
+		<div class="mb-4">
+			<label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label
+			>
+			<input
+				type="text"
+				id="customerName"
+				bind:value={targetCustomer!.name}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+			/>
+		</div>
+		<div class="mb-4">
+			<label for="contactPhone" class="block text-sm font-medium text-gray-700">Contact Phone</label
+			>
+			<input
+				type="tel"
+				id="contactPhone"
+				bind:value={targetCustomer!.phone}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+			/>
+		</div>
+		<div class="mb-4">
+			<label for="contactEmail" class="block text-sm font-medium text-gray-700">Contact Email</label
+			>
+			<input
+				type="email"
+				id="contactEmail"
+				bind:value={targetCustomer!.email}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+			/>
+		</div>
+		<div class="mb-4">
+			<label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+			<input
+				type="text"
+				id="address"
+				bind:value={targetCustomer!.address}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+			/>
+		</div>
+		
+		<button
+			onclick={handleCustomerEdit}
+			class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+		>
+			Edit Customer
 		</button>
 	</div>
 </Modal>
@@ -165,7 +244,7 @@
 							targetCustomer = { ...customer };
 							editModal = true;
 						}}
-						class="text-blue-600 hover:text-blue-900">Edit</button
+						class="text-blue-600 hover:text-blue-900 cursor-pointer">Edit</button
 					>
 				</td>
 			</tr>
@@ -180,7 +259,7 @@
       targetCustomer = { id: "", name: "", phone: "", email: "", address: "" };
       addModal = true;
     }}
-    class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+    class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600 cursor-pointer"
   >
     Add Customer
   </button>
