@@ -43,9 +43,9 @@
 				<button
 					class="flex flex-col items-center rounded-lg bg-yellow-500 p-3 text-black transition-opacity hover:opacity-90"
 				>
-					<a href="/dashboard/add-remove-customer" class="flex flex-col items-center">
+					<a href="/customers" class="flex flex-col items-center">
 						<img src={customerIcon} width="64" height="64" alt="Add/Remove Customer Icon" />
-						<span>Add/Remove Customer</span>
+						<span>Customer Management</span>
 					</a>
 				</button>
 			</div>
