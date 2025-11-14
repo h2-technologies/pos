@@ -31,6 +31,8 @@
 		} else {
 			triggerError();
 		}
+
+		addModal = false;
 	}
 
 	async function handleCustomerEdit() {
@@ -52,6 +54,36 @@
 			customers[idx] = { ...targetCustomer };
 		} else {
 			triggerError();
+		}
+
+		editModal = false;
+	}
+
+	async function handleCustomerDelete() {
+		if (targetCustomer == undefined) {
+			//problem
+			return;
+		}
+
+		if (confirm(`Are you sure you want to delete ${targetCustomer.name}? This action cannot be undone.`)) {
+			const req = await fetch('/customers', {
+				method: "DELETE",
+				body: JSON.stringify({ id: targetCustomer.id })
+			})
+
+			const res = await req.json();
+
+			if (res.success) {
+				triggerSuccess();
+				customers = customers.filter(customer => customer.id != targetCustomer!.id);
+			} else {
+				triggerError();
+			}
+
+			editModal = false;
+		} else {
+			editModal = true;
+			return;
 		}
 	}
 
@@ -137,7 +169,7 @@
 </Modal>
 
 <!-- Edit Customer Modal -->
-<Modal bind:open={editModal} class="overflow-hidden bg-white" autoclose>
+<Modal bind:open={editModal} class="overflow-hidden bg-white" >
   <div>
 		<p class="mb-4 text-lg font-semibold">Edit Customer</p>
 		<div class="mb-4">
@@ -183,8 +215,16 @@
 		<button
 			onclick={handleCustomerEdit}
 			class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+			type="submit"
 		>
 			Edit Customer
+		</button>
+		<button
+			onclick={handleCustomerDelete}
+			class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+			type="button"
+		>
+			Delete Customer
 		</button>
 	</div>
 </Modal>
@@ -256,7 +296,7 @@
 <div class="mt-4 flex justify-center">
   <button 
     onclick={() => {
-      targetCustomer = { id: "", name: "", phone: "", email: "", address: "" };
+      targetCustomer = { id: "", name: "", phone: "", email: "", address: "", active: true };
       addModal = true;
     }}
     class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600 cursor-pointer"
