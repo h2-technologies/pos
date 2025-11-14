@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import type { Customer } from "@prisma/client";
+  import type { Customer, CustomerNote } from "@prisma/client";
   import { Modal, Toast } from "flowbite-svelte";
 	import { BanOutline, CheckCircleSolid } from "flowbite-svelte-icons";
 
@@ -8,8 +8,9 @@
 
   let editModal = $state(false);
   let addModal = $state(false);
+	let viewModal = $state(false);
 
-  let targetCustomer: Customer | undefined = $state(undefined);
+  let targetCustomer: Customer & { notes: CustomerNote[] | undefined } | undefined = $state(undefined);
 
 	async function handleCustomerCreate() {
 		if (targetCustomer == undefined) {
@@ -229,6 +230,37 @@
 	</div>
 </Modal>
 
+<Modal bind:open={viewModal} class="overflow-hidden bg-white">
+	<div>
+		<p class="mb-4 text-lg font-semibold">{targetCustomer!.name}</p>
+		<div class="mb-4">
+			<label for="contactPhone" class="block text-sm font-medium text-gray-700">Contact Phone</label>
+			<p class="mt-1 text-gray-900">{targetCustomer!.phone}</p>
+		</div>
+		<div class="mb-4">
+			<label for="contactEmail" class="block text-sm font-medium text-gray-700">Contact Email</label>
+			<p class="mt-1 text-gray-900">{targetCustomer!.email}</p>
+		</div>
+		<div class="mb-4">
+			<label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+			<p class="mt-1 text-gray-900">{targetCustomer!.address}</p>
+		</div>
+		<div class="mb-4">
+			<label for="notes">Notes</label>
+			{#each targetCustomer!.notes as note}
+				<div class="outline-solid outline-2">
+					<p class="mt-1 ml-2 font-black text-black">{note.postedBy} - {new Date(note.createdAt).toLocaleString()}</p>
+					<p class="mt-1 ml-2 text-black">{note.note}</p>
+				</div>
+			{/each}
+		</div>
+		<textarea class="w-full">
+			Notes
+		</textarea>
+		<p class="text-green-400 -mt-0.5 cursor-pointer justify-end" onclick={() => { /* Add note functionality here */ }}>+ Add Note</p>
+	</div>
+</Modal>
+
 <Toast
  dismissable={false}
  position="top-right"
@@ -286,6 +318,7 @@
 						}}
 						class="text-blue-600 hover:text-blue-900 cursor-pointer">Edit</button
 					>
+					<button onclick={() => { targetCustomer = { ...customer }; viewModal = true }} class="ml-4 text-green-600 hover:text-green-900 cursor-pointer">View</button>
 				</td>
 			</tr>
 		{/each}

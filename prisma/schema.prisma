@@ -47,6 +47,7 @@ model Customer {
   address String
   active Boolean @default(true)
   notes CustomerNote[]
+  orders Order[]
 }
 
 model CustomerNote {
@@ -57,4 +58,22 @@ model CustomerNote {
   createdAt DateTime @default(now())
 
   Customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)  
+}
+
+model Order {
+  id String @id
+  customerId String
+  orderNumber String
+  orderDate DateTime @default(now())
+  skus String[] //List of SKUs in the order
+  total Float
+  status String
+  vendorInvoice String?
+  ourInvoice String?
+  customerInvoiced Boolean @default(false)
+  customerPaid Boolean @default(false)
+  vendorPaid Boolean @default(false)
+  createdBy String //User ID of creator
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade) 
 }

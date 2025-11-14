@@ -6,10 +6,10 @@ export const load: PageServerLoad = async ({ locals }) => {
   if (locals.session == null) { return redirect(302, "/login"); }
 
   try {
-    const customers = await prisma.customer.findMany({ orderBy: { id: "asc" }, where: { active: true }, include: { notes: true } });
-    return { customers };
+    const orders = await prisma.order.findMany({ orderBy: { id: "asc"}, where: { createdBy: locals.session.userId } });
+    return { orders };
   } catch (err) {
-    console.error("Error fetching customers:", err);
-    return { customers: [] };
+    console.error("Error fetching orders:", err);
+    return { orders: [] };
   }
 }

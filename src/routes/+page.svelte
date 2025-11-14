@@ -1,6 +1,7 @@
 <script lang="ts">
 	import invoiceIcon from '$lib/icons/invoice.svg';
 	import customerIcon from '$lib/icons/desk-customer.svg';
+	import orderIcon from '$lib/icons/orders.svg';
 
   import { page } from "$app/state";
 
@@ -40,12 +41,16 @@
 						<span>View Invoices</span>
 					</a>
 				</button> -->
-				<button
-					class="flex flex-col items-center rounded-lg bg-yellow-500 p-3 text-black transition-opacity hover:opacity-90"
-				>
+				<button class="flex flex-col items-center rounded-lg bg-yellow-500 p-3 text-black transition-opacity hover:opacity-90">
 					<a href="/customers" class="flex flex-col items-center">
 						<img src={customerIcon} width="64" height="64" alt="Add/Remove Customer Icon" />
 						<span>Customer Management</span>
+					</a>
+				</button>
+				<button class="flex flex-col items-center rounded-lg bg-yellow-500 p-3 text-black transition-opacity hover:opacity-90">
+					<a href="/orders" class="flex flex-col items-center">
+						<img src={orderIcon} width="64" height="64" alt="Order Management Icon" />
+						<span>Orders</span>
 					</a>
 				</button>
 			</div>
