@@ -1,4 +1,4 @@
-using POS.Web.Components;
+using PointOfSale.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

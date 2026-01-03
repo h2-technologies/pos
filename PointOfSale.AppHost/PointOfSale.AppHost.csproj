@@ -1,0 +1,16 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Api\PointOfSale.Api.csproj" />
+    <ProjectReference Include="..\Web\PointOfSale.Web.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>4185b3f2-0fa0-4080-a1a4-78a391cbe640</UserSecretsId>
+  </PropertyGroup>
+
+</Project>
