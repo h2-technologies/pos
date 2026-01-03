@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "w+HxLB7PF2g=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\svalencia\\projects\\h2technologies\\pos\\Web\\POS.Web.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\svalencia\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.1\\microsoft.aspnetcore.app.internal.assets.10.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
