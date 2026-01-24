@@ -1,7 +1,7 @@
 import { prisma } from '$lib/db';
 
 export async function POST({ locals, request }) {
-  if (!locals.session) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
+  if (!locals.auth.user) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
   const { name, phone, email, address } = await request.json();
 
   if (!name || !phone || !email || !address) { return new Response(JSON.stringify({ success: false, message: "Invalid inputs" }), { status: 400 }); }
@@ -28,7 +28,7 @@ export async function POST({ locals, request }) {
 }
 
 export async function PUT({ locals, request }) {
-  if (!locals.session) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
+  if (!locals.auth.user) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
 
   const { id, name, phone, email, address } = await request.json();
 
@@ -49,7 +49,7 @@ export async function PUT({ locals, request }) {
 }
 
 export async function DELETE({ locals, request }) {
-  if (!locals.session) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
+  if (!locals.auth.user) { return new Response(JSON.stringify({ success: false, message: "Unauthorized" }), { status: 401 }); }
   
   const { id } = await request.json();
 

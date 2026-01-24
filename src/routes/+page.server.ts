@@ -1,8 +1,7 @@
-import { redirect } from "@sveltejs/kit";
-import type { PageServerLoad, RequestEvent } from "./$types";
+import { authKit } from '@workos/authkit-sveltekit';
 
-export const load: PageServerLoad = (event: RequestEvent) => {
-  if (event.locals.session == null) {
-    return redirect(302, '/login');
+export const load = authKit.withAuth(async ({ auth }) => {
+  return {
+    user: auth.user
   }
-}
+})

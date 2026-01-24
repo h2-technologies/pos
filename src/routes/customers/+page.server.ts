@@ -1,15 +1,13 @@
-import { redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import { prisma } from "$lib/db";
+import { prisma } from '$lib/db.js';
+import { authKit } from '@workos/authkit-sveltekit';
 
-export const load: PageServerLoad = async ({ locals }) => {
-  if (locals.session == null) { return redirect(302, "/login"); }
 
+export const load = authKit.withAuth(async ({ auth }) => {
   try {
     const customers = await prisma.customer.findMany({ orderBy: { id: "asc" }, where: { active: true }, include: { notes: true } });
-    return { customers };
+    return { customers, user: auth.user };
   } catch (err) {
     console.error("Error fetching customers:", err);
-    return { customers: [] };
+    return { customers: [], user: auth.user }
   }
-}
+})

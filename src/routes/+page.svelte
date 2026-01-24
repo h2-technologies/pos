@@ -4,12 +4,16 @@
 	import orderIcon from '$lib/icons/orders.svg';
 
   import { page } from "$app/state";
+	import type { User } from '@workos/authkit-sveltekit';
 
+	let user: User = page.data.user;
+
+	console.log(page.data.user)
 </script>
 
 <div class="flex min-h-screen flex-col bg-gray-200">
 	<div class="m-2 flex flex-col items-center p-2">
-		<h1 class="text-4xl font-bold">Welcome, {page.data.user.name.split(" ")[0]}</h1>
+		<h1 class="text-4xl font-bold">Welcome, {user.firstName}</h1>
 		<h2 class="text-2xl font-semibold">User Dashboard</h2>
 	</div>
 
