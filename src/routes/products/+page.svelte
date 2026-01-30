@@ -57,6 +57,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Product Catalog | H2 Point of Sale</title>
+</svelte:head>
+
 <div class="flex min-h-screen flex-col bg-gray-50">
 	<div class="bg-white shadow">
 		<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
