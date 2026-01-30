@@ -13,7 +13,7 @@ COPY . .
 
 RUN npm i -g pnpm
 
-RUN pnpm i
+RUN pnpm i --ignore-scripts
 
 RUN pnpx prisma generate
 
