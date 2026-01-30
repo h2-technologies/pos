@@ -13,41 +13,16 @@ datasource db {
   provider = "postgresql"
 }
 
-model Customer { 
-  id String @id 
-  name String
-  email String
-  phone String
-  address String
-  active Boolean @default(true)
-  notes CustomerNote[]
-  orders Order[]
-}
-
-model CustomerNote {
-  id String @id @default(cuid())
-  customerId String 
-  note String
-  postedBy String //So we can store names if we delete users
-  createdAt DateTime @default(now())
-
-  Customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)  
-}
-
-model Order {
+model Product {
   id String @id
-  customerId String
-  orderNumber String
-  orderDate DateTime @default(now())
-  skus String[] //List of SKUs in the order
-  total Float
-  status String
-  vendorInvoice String?
-  ourInvoice String?
-  customerInvoiced Boolean @default(false)
-  customerPaid Boolean @default(false)
-  vendorPaid Boolean @default(false)
-  createdBy String //User ID of creator
-
-  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade) 
+  synnexNumber String?
+  manufacturer String
+  productName String
+  sku String @unique
+  extendedPrice Float
+  msrp Float
+  shipping Float
+  price Float
+  category String?
 }
+

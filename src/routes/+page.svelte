@@ -7,56 +7,32 @@
 	import type { User } from '@workos/authkit-sveltekit';
 
 	let user: User = page.data.user;
-
-	console.log(page.data.user)
 </script>
 
-<div class="flex min-h-screen flex-col bg-gray-200">
-	<div class="m-2 flex flex-col items-center p-2">
-		<h1 class="text-4xl font-bold">Welcome, {user.firstName}</h1>
-		<h2 class="text-2xl font-semibold">User Dashboard</h2>
+<div class="flex min-h-screen flex-col bg-gray-50">
+	<div class="bg-white shadow">
+		<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+			<h1 class="text-3xl font-bold tracking-tight text-gray-900">Welcome, {user.firstName}</h1>
+			<p class="mt-2 text-sm text-gray-600">User Dashboard</p>
+		</div>
 	</div>
 
-	<div class="flex w-full flex-wrap justify-center gap-6 px-2">
-		<div class="h-1/8 w-full max-w-2xl rounded-lg bg-white p-6 shadow-md">
-			<h3 class="mb-4 text-lg font-semibold">Tools</h3>
-			<div class="grid grid-cols-3 gap-4">
-				<!-- <button
-					class="flex flex-col items-center rounded-lg bg-orange-500 p-3 text-black transition-opacity hover:opacity-90"
-				>
-					<a href="/create-invoice" class="flex flex-col items-center">
-						<img src={invoiceIcon} width="64" height="64" alt="Create Invoice Icon" />
-						<span>Create Invoice</span>
-					</a>
-				</button>
-				<button
-					class="flex flex-col items-center rounded-lg bg-orange-500 p-3 text-black transition-opacity hover:opacity-90"
-				>
-					<a href="/dashboard/create-quote" class="flex flex-col items-center">
-						<img src={invoiceIcon} width="64" height="64" alt="Create Quote Icon" />
-						<span>Create quote</span>
-					</a>
-				</button>
-				<button
-					class="flex flex-col items-center rounded-lg bg-orange-500 p-3 text-black transition-opacity hover:opacity-90"
-				>
-					<a href="/view-invoices" class="flex flex-col items-center">
-						<img src={invoiceIcon} width="64" height="64" alt="View Invoices Icon" />
-						<span>View Invoices</span>
-					</a>
-				</button> -->
-				<button class="flex flex-col items-center rounded-lg bg-yellow-500 p-3 text-black transition-opacity hover:opacity-90">
-					<a href="/customers" class="flex flex-col items-center">
-						<img src={customerIcon} width="64" height="64" alt="Add/Remove Customer Icon" />
-						<span>Customer Management</span>
-					</a>
-				</button>
-				<button class="flex flex-col items-center rounded-lg bg-yellow-500 p-3 text-black transition-opacity hover:opacity-90">
-					<a href="/orders" class="flex flex-col items-center">
-						<img src={orderIcon} width="64" height="64" alt="Order Management Icon" />
-						<span>Orders</span>
-					</a>
-				</button>
+	<div class="mx-auto max-w-7xl py-12 px-4 sm:px-6 lg:px-8">
+		<div class="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+			<!-- Part Catalog Card -->
+			<div class="overflow-hidden rounded-lg bg-white shadow hover:shadow-lg transition-shadow">
+				<div class="px-6 py-8">
+					<h3 class="text-lg font-medium leading-6 text-gray-900">Product Catalog</h3>
+					<p class="mt-2 text-sm text-gray-500">Browse and manage the products inventory.</p>
+					<div class="mt-6">
+						<a
+							href="/parts"
+							class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+						>
+							Open Catalog
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
