@@ -15,7 +15,9 @@ RUN npm i -g pnpm
 
 RUN pnpm i --ignore-scripts
 
-RUN pnpx prisma generate
+RUN pnpm svelte-kit sync
+
+RUN pnpm prisma generate
 
 # Declare the arguments
 ARG WORKOS_CLIENT_ID
