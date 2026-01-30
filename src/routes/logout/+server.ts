@@ -1,13 +1,5 @@
-import { deleteSessionTokenCookie, invalidateSession } from "$lib/auth";
-import type { RequestEvent } from "../$types";
+import { authKit } from "@workos/authkit-sveltekit";
 
-export async function GET(event: RequestEvent): Promise<Response> {
-  await invalidateSession(event.locals.session!.id);
-  deleteSessionTokenCookie(event);
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: '/login'
-    }
-  })
+export async function GET(event) {
+  return authKit.signOut(event);
 }
